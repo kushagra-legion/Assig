@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MyFrag</string>
+
+    <string name="but1">Fragment 1</string>
+    <string name="but2">Fragment 2</string>
+    <string name="but3">Fragment 3</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
