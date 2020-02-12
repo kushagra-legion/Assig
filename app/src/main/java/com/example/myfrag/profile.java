@@ -19,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -139,50 +140,32 @@ public class profile extends Fragment {
         //RequestQueue initialized
         mRequestQueue = Volley.newRequestQueue(getActivity());
 
-//RequestQueue initialized
-        mRequestQueue = Volley.newRequestQueue(getActivity());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET, url1, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        if(response!=null){
+                            // Process the JSON
+                            ArrayList<example_item> exampleList=new ArrayList<>();
+                            try{
+                                // Loop through the array elements
+                                for (int i = 0; i < response.length(); i++) {
+                                    JSONObject js = response.getJSONObject(i);
+                                    String id = js.getString("id");
+                                   // textView1.setText(id);
 
-        //String Request initialized
-        mStringRequest = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+                                    //    JSONObject obj = jsonArray.getJSONObject(i);
 
-                            ArrayList<example_item> exampleList = new ArrayList<>();
-                        /*    ImageView imageView = root.findViewById(R.id.imageView2);
+                                String loginname = js.getString("login");
 
-                            Picasso.get().load(picx).into(imageView);
-*/                          String str=response;
-                JSONArray jsonArray = null;
-                try {
-                    jsonArray = new JSONArray(str);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                                String loginpic = js.getString("avatar_url");
+                                exampleList.add(new example_item(loginpic, loginname));
+                                textView2.setText("Followers : "+loginname);
 
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject obj = null;
-                    try {
-                        obj = jsonArray.getJSONObject(i);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        String loginname = obj.getString("login");
-
-                        String loginpic = obj.getString("avatar_url");
-                        exampleList.add(new example_item(loginname,loginpic));
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-
-
-                              //  String loginname = employee.getString("login");
-                              //  String loginpic = employee.getString("avatar_url");
-                               // exampleList.add(new example_item(loginname,loginpic));
+                                //  String loginname = employee.getString("login");
+                                //  String loginpic = employee.getString("avatar_url");
+                                // exampleList.add(new example_item(loginname,loginpic));
 
 
                             }
@@ -195,19 +178,19 @@ public class profile extends Fragment {
                             mrecyclerview.setAdapter(mrecycleadapter);
 
 
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-
-                    }
+                    }}
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                     }
                 });
-        mRequestQueue.add(mStringRequest);
-
+        mRequestQueue.add(jsonArrayRequest);
 
     }
-
 
 }
